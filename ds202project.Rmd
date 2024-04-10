@@ -20,7 +20,23 @@ iowa_roads
 ```
 
 ```{r}
+# Comparing headline to subarea
+library(ggplot2)
+categories <- unique(iowa_roads$Headline) # find all of the categories
+numberOfCategories <- length(categories) # number of categories
+#numberOfCategories
+#categories
+headline_levels <- c("Partially Covered with Snow", "Partially Covered with Frost", "seasonal roadway conditions", "partially covered with snow", "travel not advised", "Partially Covered with Ice", "partially covered with slush", "completely covered with snow", "partially covered with mixed snow ice or slush", "Seasonal", "Completely Covered with Snow", "Partially Covered with Mixed", "partially covered with ice", "Completely Covered with Ice", "partially covered with frost", "Travel Not Advised", "completely covered with ice", "Completely Covered with Mixed", "Partially Covered with Slush", "", "completely covered with mixed snow ice or slush", "completely covered with frost", "completely covered with slush", "Completely Covered with Slush", " -95.824227360233 41.213367969968", "Completely Covered with Frost", "Impassable")
 
+iowa_roads$Headline <- factor(iowa_roads$Headline, levels = headline_levels)
+
+ggplot(iowa_roads, aes(x = Headline, fill = Headline)) +
+  geom_bar() +
+  scale_x_discrete(guide = guide_axis(angle = 90)) +
+  labs(title = "Headline Frequency",
+       x = "Frequency of Headline",
+       y = "Count") +
+  theme_minimal()
 ```
 
 ```{r}
