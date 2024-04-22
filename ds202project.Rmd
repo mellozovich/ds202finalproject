@@ -45,3 +45,7 @@ geom_bar(stat="count") +
   scale_x_discrete(guide = guide_axis(angle = 90))
 ```
 
+```{r}
+ggplot(iowa_roads, aes(x=CARS.SubArea, y = CONDITION_ELAPSED)) +
+  geom_point()
+```
