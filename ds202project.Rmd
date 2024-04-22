@@ -40,7 +40,7 @@ ggplot(iowa_roads, aes(x = Headline, fill = Headline)) +
 ```
 
 ```{r}
-ggplot(iowa_roads, aes(x=Headline, fill= iowa_roads$CARS.Subarea, color= iowa_roads$CARS.Subarea)) + 
+ggplot(iowa_roads, aes(x=Headline, fill= iowa_roads$CARS.SubArea, color= iowa_roads$CARS.SubArea)) + 
 geom_bar(stat="count") + 
   scale_x_discrete(guide = guide_axis(angle = 90))
 ```
