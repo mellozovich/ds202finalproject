@@ -17,9 +17,9 @@ When you click the **Knit** button a document will be generated that includes bo
 ```{r}
 library(data.table)
 iowa_roads <- fread("C:\\Users\\mello\\Downloads\\HISTORIC_ROAD_CONDITIONS_data (1).csv")
-#iowa_roads
-iowa_roads <- file.choose()
 iowa_roads
+#iowa_roads <- subset(roads, select = -c("the_geom", "Road Condition", "Phrase", "CARS Segment ID", "CARS Short Name", "CARS Long Name", "CARS District", "COST_CENTER", "MAINT DISTRICT", "SHAPE__Length_2", "SHAPE__Length"))
+#iowa_roads
 ```
 
 ```{r}
