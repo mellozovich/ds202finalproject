@@ -16,7 +16,8 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 ```{r}
 library(data.table)
-iowa_roads <- fread("C:\\Users\\mello\\Downloads\\HISTORIC_ROAD_CONDITIONS_data (1).csv")
+iowa_roads <- fread(file.choose())
+#iowa_roads <- fread("C:\\Users\\mello\\Downloads\\HISTORIC_ROAD_CONDITIONS_data (1).csv")
 iowa_roads
 #iowa_roads <- subset(roads, select = -c("the_geom", "Road Condition", "Phrase", "CARS Segment ID", "CARS Short Name", "CARS Long Name", "CARS District", "COST_CENTER", "MAINT DISTRICT", "SHAPE__Length_2", "SHAPE__Length"))
 #iowa_roads
@@ -25,6 +26,13 @@ iowa_roads
 ```{r}
 iowa_roads <- read.csv("https://raw.githubusercontent.com/Dkjam5511/DS202FinalProjectDataset/master/HISTORIC_ROAD_CONDITIONS_data.csv")
 iowa_roads
+```
+
+```{r}
+iowa_roads <- subset(iowa_roads, select = -c(`the_geom`, `Road Condition`, `Phrase`, `CARS Segment ID`, 
+                                             `CARS Short Name`, `CARS Long Name`, `CARS District`, 
+                                             `COST_CENTER`, `MAINT_DISTRICT`, `SHAPE__Length_2`, 
+                                             `SHAPE__Length`))
 ```
 
 ```{r}
