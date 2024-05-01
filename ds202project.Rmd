@@ -56,9 +56,33 @@ ggplot(iowa_roads, aes(x = Headline, fill = Headline)) +
 ```
 
 ```{r}
-ggplot(iowa_roads, aes(x=Headline, fill= iowa_roads$CARS.SubArea, color= iowa_roads$CARS.SubArea)) + 
-geom_bar(stat="count") + 
-  scale_x_discrete(guide = guide_axis(angle = 90))
+#subarea_categories <- unique(iowa_roads$CARS.SubArea)
+
+#ggplot(iowa_roads, aes(x=Headline, fill= iowa_roads$CARS.SubArea, color= iowa_roads$CARS.SubArea)) + 
+#geom_bar(stat="count") + 
+  #scale_x_discrete(guide = guide_axis(angle = 90))
+
+
+# Count the frequency of each category
+category_freq <- iowa_roads %>%
+  count(CARS.SubArea)
+
+# Determine the number of categories per section
+categories_per_section <- ceiling(nrow(category_freq) / 11)
+
+# Assign a section number to each category based on frequency rank
+category_freq <- category_freq %>%
+  mutate(section = rep(1:11, each = categories_per_section, length.out = n()))
+
+# Merge section information back to the original dataframe
+iowa_roads <- iowa_roads %>%
+  left_join(category_freq, by = "CARS.SubArea")
+
+# Plot using facet_wrap with the 'section' variable
+ggplot(iowa_roads, aes(x=Headline, fill= CARS.SubArea, color= CARS.SubArea)) + 
+  geom_bar(stat="count") + 
+  scale_x_discrete(guide = guide_axis(angle = 90)) +
+  facet_wrap(~ section, scales = "free")
 ```
 
 ```{r}
