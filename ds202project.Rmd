@@ -84,3 +84,26 @@ ggplot(sampled_data, aes(x = `CARS SubArea`, y = CONDITION_ELAPSED)) +
   scale_size_continuous(range = c(1, 5)) + # Adjust point size if necessary
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+```{r}
+ggplot(iowa_roads, aes(x=`CARS SubArea`, y = CONDITION_NOT_NORMAL_ELAPSED)) +
+  geom_point(alpha = 0.5) +
+  scale_size_continuous(range = c(1, 5)) + # Adjust point size if necessary
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+```{r}
+# Sample a subset of the data
+sampled_data1 <- iowa_roads[sample(nrow(iowa_roads), 1000), ]
+
+ggplot(sampled_data, aes(x = `CARS SubArea`, y = CONDITION_NOT_NORMAL_ELAPSED)) +
+  geom_point(alpha = 0.5) +  # Adjust transparency
+  scale_size_continuous(range = c(1, 5)) + # Adjust point size if necessary
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+```{r}
+#Code for correlation coefficient for categorical variables...requires editing
+tbl = matrix(data=c(55, 45, 20, 30), nrow=2, ncol=2, byrow=T)
+dimnames(tbl) = list(City=c('B', 'T'), Gender=c('M', 'F'))
+
+chi2 = chisq.test(tbl, correct=F)
+c(chi2$statistic, chi2$p.value)
+```
