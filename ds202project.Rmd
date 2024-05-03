@@ -86,6 +86,19 @@ ggplot(iowa_roads, aes(x=Headline, fill= CARS.SubArea, color= CARS.SubArea)) +
 ```
 
 ```{r}
-ggplot(iowa_roads, aes(x=CARS.SubArea, y = CONDITION_ELAPSED)) +
-  geom_point()
+ggplot(iowa_roads, aes(x=`CARS SubArea`, y = CONDITION_ELAPSED)) +
+  geom_point(alpha = 0.5) +
+  scale_size_continuous(range = c(1, 5)) + # Adjust point size if necessary
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+#Sample size is too big, so a subset of the data is needed for visibility
+```
+```{r}
+# Sample a subset of the data
+sampled_data <- iowa_roads[sample(nrow(iowa_roads), 1000), ]
+
+ggplot(sampled_data, aes(x = `CARS SubArea`, y = CONDITION_ELAPSED)) +
+  geom_point(alpha = 0.5) +  # Adjust transparency
+  scale_size_continuous(range = c(1, 5)) + # Adjust point size if necessary
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
