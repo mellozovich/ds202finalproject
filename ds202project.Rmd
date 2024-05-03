@@ -59,11 +59,8 @@ ggplot(iowa_roads, aes(x = Headline, fill = Headline)) +
 ```{r}
 library(ggplot2)
 
-# Sample a subset of the data for better visualization
-sampled_data <- iowa_roads[sample(nrow(iowa_roads), 10000), ]
-
 # Plot the distribution of categories without faceting
-ggplot(sampled_data, aes(x = Headline, fill = `CARS SubArea`, color = `CARS SubArea`)) + 
+ggplot(iowa_roads, aes(x = Headline, fill = `CARS SubArea`, color = `CARS SubArea`)) + 
   geom_bar(stat = "count") + 
   scale_x_discrete(guide = guide_axis(angle = 90)) +
   labs(title = "Distribution of categories") # Add a plot title
