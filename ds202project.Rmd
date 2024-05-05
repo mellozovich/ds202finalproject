@@ -146,3 +146,12 @@ dimnames(tbl) = list(City=c('B', 'T'), Gender=c('M', 'F'))
 chi2 = chisq.test(tbl, correct=F)
 c(chi2$statistic, chi2$p.value)
 ```
+```{r}
+anova_result <- aov(CONDITION_ELAPSED ~ `CARS SubArea`, data = iowa_roads)
+summary(anova_result)
+
+# Example using Chi-square test
+# Assuming 'iowa_roads' is your dataset
+chisq_result <- chisq.test(table(iowa_roads$CONDITION_ELAPSED, iowa_roads$`CARS SubArea`))
+chisq_result
+```
