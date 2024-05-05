@@ -150,8 +150,14 @@ c(chi2$statistic, chi2$p.value)
 anova_result <- aov(CONDITION_ELAPSED ~ `CARS SubArea`, data = iowa_roads)
 summary(anova_result)
 
-# Example using Chi-square test
-# Assuming 'iowa_roads' is your dataset
 chisq_result <- chisq.test(table(iowa_roads$CONDITION_ELAPSED, iowa_roads$`CARS SubArea`))
+chisq_result
+```
+
+```{r}
+anova_result <- aov(CONDITION_NOT_NORMAL_ELAPSED ~ `CARS SubArea`, data = iowa_roads)
+summary(anova_result)
+
+chisq_result <- chisq.test(table(iowa_roads$CONDITION_NOT_NORMAL_ELAPSED, iowa_roads$`CARS SubArea`))
 chisq_result
 ```
