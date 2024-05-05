@@ -56,15 +56,54 @@ ggplot(iowa_roads, aes(x = Headline, fill = Headline)) +
 ```
 
 ```{r}
-```{r}
 library(ggplot2)
+library(dplyr)
 
-# Plot the distribution of categories without faceting
 ggplot(iowa_roads, aes(x = Headline, fill = `CARS SubArea`, color = `CARS SubArea`)) + 
   geom_bar(stat = "count") + 
   scale_x_discrete(guide = guide_axis(angle = 90)) +
-  labs(title = "Distribution of categories") # Add a plot title
+  labs(title = "Headline Frequency")
 ```
+
+```{r}
+#ggplot(iowa_roads, aes(x = Headline, y = `CARS SubArea`, color = `CARS SubArea`)) + 
+  #geom_point() + 
+  #scale_x_discrete(guide = guide_axis(angle = 90)) +
+  #labs(title = "Headline Frequency") + 
+  #theme(axis.text.y = element_text(hjust = 1))
+
+ggplot(iowa_roads, aes(x = `CARS SubArea`, y = Headline, color = `CARS SubArea`)) + 
+  geom_point(size = 3) +  # Adjust point size for visibility
+  scale_x_discrete(guide = guide_axis(angle = 90)) +
+  labs(title = "Headline Frequency") + 
+  theme(axis.text.y = element_text(hjust = 1)) +
+  theme_minimal() +
+  theme(
+    plot.background = element_rect(fill = "transparent", color = NA),  # Set plot background color to transparent
+    panel.background = element_rect(fill = "transparent", color = NA)  # Set panel background color to transparent
+  ) +
+  coord_flip()  # Flip coordinates to make the x-axis labels horizontal
+```
+
+```{r}
+sampled_data3 <- iowa_roads[sample(nrow(iowa_roads), 1000), ]
+#ggplot(sampled_data3, aes(x = `CARS SubArea`, y = Headline, color = `CARS SubArea`)) + 
+  #geom_point() + 
+  #scale_x_discrete(guide = guide_axis(angle = 90)) +
+  #labs(title = "Headline Frequency") + 
+  #theme(axis.text.y = element_text(hjust = 1))
+
+ggplot(sampled_data3, aes(x = `CARS SubArea`, y = Headline, color = `CARS SubArea`)) + 
+  geom_point(size = 3) +  # Adjust point size for visibility
+  scale_x_discrete(guide = guide_axis(angle = 90)) +
+  labs(title = "Headline Frequency") + 
+  theme(axis.text.y = element_text(hjust = 1)) +
+  theme_minimal() +
+  theme(
+    plot.background = element_rect(fill = "transparent", color = NA),  # Set plot background color to transparent
+    panel.background = element_rect(fill = "transparent", color = NA)  # Set panel background color to transparent
+  ) +
+  coord_flip()  # Flip coordinates to make the x-axis labels horizontal
 ```
 
 ```{r}
