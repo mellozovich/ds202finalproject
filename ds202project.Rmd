@@ -29,7 +29,7 @@ iowa_roads
 ```
 
 ```{r}
-iowa_roads <- subset(iowa_roads, select = -c(`the_geom`, `Road Condition`, `Phrase`, `CARS Segment ID`, 
+iowa_roads <- subset(iowa_roads, select = -c(`the_geom`, `Phrase`, `CARS Segment ID`, 
                                              `CARS Short Name`, `CARS Long Name`, `CARS District`, 
                                              `COST_CENTER`, `MAINT_DISTRICT`, `SHAPE__Length_2`, 
                                              `SHAPE__Length`))
@@ -52,6 +52,28 @@ ggplot(iowa_roads, aes(x = Headline, fill = Headline)) +
   labs(title = "Headline Frequency",
        x = "Frequency of Headline",
        y = "Count") +
+  theme_minimal()
+```
+
+```{r}
+# Comparing headline to subarea
+library(ggplot2)
+library(scales)
+categories <- unique(iowa_roads$`Road Condition`) # find all of the categories
+numberOfCategories <- length(categories) # number of categories
+#numberOfCategories
+#categories
+condition_levels <- c("Partially Covered", "Seasonal", "Travel Not Advised", "Completely Covered")
+
+iowa_roads$`Road Condition` <- factor(iowa_roads$`Road Condition`, levels = condition_levels)
+
+ggplot(iowa_roads, aes(x = `Road Condition`, fill = `Road Condition`)) +
+  geom_bar() +
+  scale_x_discrete(guide = guide_axis(angle = 90)) +
+  labs(title = "Road Condition Frequency",
+       x = "Frequency of Road Condition",
+       y = "Count") +
+  scale_y_continuous(labels = comma_format()) +
   theme_minimal()
 ```
 
@@ -93,17 +115,16 @@ sampled_data3 <- iowa_roads[sample(nrow(iowa_roads), 1000), ]
   #labs(title = "Headline Frequency") + 
   #theme(axis.text.y = element_text(hjust = 1))
 
-ggplot(sampled_data3, aes(x = `CARS SubArea`, y = Headline, color = `CARS SubArea`)) + 
+ggplot(sampled_data3, aes(x = `CARS SubArea`, y = `Road Condition`, color = `CARS SubArea`)) + 
   geom_point(size = 3) +  # Adjust point size for visibility
   scale_x_discrete(guide = guide_axis(angle = 90)) +
-  labs(title = "Headline Frequency") + 
+  labs(title = "Road Condition Frequency") + 
   theme(axis.text.y = element_text(hjust = 1)) +
   theme_minimal() +
   theme(
     plot.background = element_rect(fill = "transparent", color = NA),  # Set plot background color to transparent
     panel.background = element_rect(fill = "transparent", color = NA)  # Set panel background color to transparent
-  ) +
-  coord_flip()  # Flip coordinates to make the x-axis labels horizontal
+  )
 ```
 
 ```{r}
@@ -114,6 +135,7 @@ ggplot(iowa_roads, aes(x=`CARS SubArea`, y = CONDITION_ELAPSED)) +
 
 #Sample size is too big, so a subset of the data is needed for visibility
 ```
+
 ```{r}
 # Sample a subset of the data
 sampled_data <- iowa_roads[sample(nrow(iowa_roads), 1000), ]
@@ -123,12 +145,14 @@ ggplot(sampled_data, aes(x = `CARS SubArea`, y = CONDITION_ELAPSED)) +
   scale_size_continuous(range = c(1, 5)) + # Adjust point size if necessary
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+
 ```{r}
 ggplot(iowa_roads, aes(x=`CARS SubArea`, y = CONDITION_NOT_NORMAL_ELAPSED)) +
   geom_point(alpha = 0.5) +
   scale_size_continuous(range = c(1, 5)) + # Adjust point size if necessary
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+
 ```{r}
 # Sample a subset of the data
 sampled_data1 <- iowa_roads[sample(nrow(iowa_roads), 1000), ]
@@ -138,6 +162,7 @@ ggplot(sampled_data, aes(x = `CARS SubArea`, y = CONDITION_NOT_NORMAL_ELAPSED)) 
   scale_size_continuous(range = c(1, 5)) + # Adjust point size if necessary
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+
 ```{r}
 #Code for correlation coefficient for categorical variables...requires editing
 tbl = matrix(data=c(55, 45, 20, 30), nrow=2, ncol=2, byrow=T)
@@ -146,6 +171,7 @@ dimnames(tbl) = list(City=c('B', 'T'), Gender=c('M', 'F'))
 chi2 = chisq.test(tbl, correct=F)
 c(chi2$statistic, chi2$p.value)
 ```
+
 ```{r}
 anova_result <- aov(CONDITION_ELAPSED ~ `CARS SubArea`, data = iowa_roads)
 summary(anova_result)
@@ -160,4 +186,54 @@ summary(anova_result)
 
 chisq_result <- chisq.test(table(iowa_roads$CONDITION_NOT_NORMAL_ELAPSED, iowa_roads$`CARS SubArea`))
 chisq_result
+```
+
+```{r}
+# Aggregate the data to count occurrences of each subarea
+subarea_counts <- aggregate(Headline ~ `CARS SubArea`, data = iowa_roads, FUN = length)
+
+# Reorder the levels of CARS SubArea based on frequency of headlines
+subarea_counts <- subarea_counts[order(subarea_counts$Headline, decreasing = TRUE), ]
+
+# Convert CARS SubArea to a factor with reordered levels
+subarea_counts$`CARS SubArea` <- factor(subarea_counts$`CARS SubArea`, levels = subarea_counts$`CARS SubArea`)
+
+# Plotting with ggplot2
+ggplot(subarea_counts, aes(x = `CARS SubArea`, y = Headline)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(x = "SubArea", y = "Frequency of Total Headlines", title = "Frequency of Headlines by SubArea")
+
+```
+
+```{r}
+average_condition_elapsed <- aggregate(CONDITION_ELAPSED ~ `CARS SubArea`, data = iowa_roads, FUN = mean)
+
+# Reorder the levels of CARS SubArea based on average condition elapsed
+average_condition_elapsed <- average_condition_elapsed[order(average_condition_elapsed$CONDITION_ELAPSED, decreasing=TRUE), ]
+
+# Convert CARS SubArea to a factor with reordered levels
+average_condition_elapsed$`CARS SubArea` <- factor(average_condition_elapsed$`CARS SubArea`, levels = average_condition_elapsed$`CARS SubArea`)
+
+# Plotting with ggplot2
+ggplot(average_condition_elapsed, aes(x = `CARS SubArea`, y = CONDITION_ELAPSED)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(x = "SubArea", y = "Average Condition Elapsed (Hours)", title = "Average Condition Elapsed by SubArea")
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Aggregate data to calculate average cleaning time for each road length
+avg_condition_time <- iowa_roads %>%
+  group_by(`CARS Segment Length Miles`) %>%
+  summarize(avg_condition_time = mean(CONDITION_ELAPSED))
+
+ggplot(data = avg_condition_time, aes(x = `CARS Segment Length Miles`, y = avg_condition_time)) +
+  geom_line(color="blue") +  # Line plot
+  labs(x = "Road Length (Miles)", y = "Average Condition Elapsed (Time)") + 
+  ggtitle("Average Condition Time by Road Length") + 
+  theme_minimal()
 ```
